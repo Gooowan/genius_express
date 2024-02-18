@@ -2,6 +2,32 @@ doctype html
 html
   head
     title #{song.title}
+    script(src="/socket.io/socket.io.js")
+    script.
+      document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+        const songId = "#{song._id}";
+        console.log(songId);
+        socket.emit('joinRoom', {songId: songId});
+
+        socket.on('comment', (comment) => {
+          const commentsList = document.getElementById('commentsList');
+          const commentElement = document.createElement('li');
+          commentElement.textContent = comment.username + ": " + comment.text;
+          commentsList.appendChild(commentElement);
+        });
+
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const username = document.getElementById('username').value;
+          const commentText = document.getElementById('commentText').value;
+          if (username && commentText) {
+            socket.emit('newComment', {songId: songId, username: username, text: commentText});
+            document.getElementById('username').value = '';
+            document.getElementById('commentText').value = '';
+          }
+        });
+      })
   body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
     h1(style='margin-bottom: 0;') #{song.title}
     h2(style='margin-top: 5px; color: #666;') By #{song.artist}
@@ -9,6 +35,12 @@ html
     pre(style='background-color: #fff; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);') #{song.lyrics}
     a.back-link(href='/', style='display: inline-block; margin-top: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Back to list
     a.back-link(href=`/${song._id}/edit`, style='display: inline-block; margin: 20px 10px 20px 0; background-color: #ffc107; color: black; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Update Song
-
     form(action=`/${song._id}?_method=DELETE`, method="post", style='display: inline-block;')
       button(type="submit", style='background-color: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;') Delete Song
+    ul#commentsList
+      each comment in comments
+        li= comment.username + ": " + comment.text
+    form#commentForm
+      input(type="text", id="username", placeholder="Your name")
+      input(type="text", id="commentText", placeholder="Write a comment...")
+      button(type="submit") Post Comment
