@@ -1,0 +1,23 @@
+doctype html
+html
+    head
+        title Add Song
+        style.
+            body { background-color: yellow; color: black; }
+            .form-label { color: black; }
+            .submit-button { background-color: black; color: yellow; padding: 5px 10px; border: none; cursor: pointer; }
+            .form-input { margin-bottom: 10px; }
+    body
+        h1 Add a New Song
+        form(action="/new", method="post")
+            .form-input
+                label.form-label(for="title") Title:
+                input(type="text", id="title", name="title", required=true)
+            .form-input
+                label.form-label(for="artist") Artist:
+                input(type="text", id="artist", name="artist", required=true)
+            .form-input
+                label.form-label(for="lyrics") Lyrics:
+                textarea(id="lyrics", name="lyrics", required=true)
+            .form-input
+                button.submit-button(type="submit") Submit

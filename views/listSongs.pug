@@ -1,0 +1,15 @@
+doctype html
+html
+    head
+        title Song List
+        style.
+            body { background-color: yellow; color: black; }
+            .song-link { color: black; text-decoration: none; display: block; margin: 5px 0; }
+            .add-song-link { color: black; text-decoration: underline; }
+    body
+        h1 Song List
+        a.add-song-link(href='/new') Add New Song
+        ul
+            each song in songs
+                li
+                    a.song-link(href=`/${song._id}`) #{song.title} by #{song.artist}

@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title #{song.title}
+    style.
+      body { background-color: yellow; color: black; }
+      .back-link { color: black; text-decoration: underline; }
+  body
+    h1 #{song.title}
+    h2 By #{song.artist}
+    h3 Lyrics
+    pre #{song.lyrics}
+    a.back-link(href='/') Back to list
