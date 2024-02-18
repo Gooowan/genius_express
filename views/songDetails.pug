@@ -2,12 +2,13 @@ doctype html
 html
   head
     title #{song.title}
-    style.
-      body { background-color: yellow; color: black; }
-      .back-link { color: black; text-decoration: underline; }
-  body
-    h1 #{song.title}
-    h2 By #{song.artist}
-    h3 Lyrics
-    pre #{song.lyrics}
-    a.back-link(href='/') Back to list
+  body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
+    h1(style='margin-bottom: 0;') #{song.title}
+    h2(style='margin-top: 5px; color: #666;') By #{song.artist}
+    h3(style='color: #888;') Lyrics
+    pre(style='background-color: #fff; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);') #{song.lyrics}
+    a.back-link(href='/', style='display: inline-block; margin-top: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Back to list
+    a.back-link(href=`/${song._id}/edit`, style='display: inline-block; margin: 20px 10px 20px 0; background-color: #ffc107; color: black; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Update Song
+
+    form(action=`/${song._id}?_method=DELETE`, method="post", style='display: inline-block;')
+      button(type="submit", style='background-color: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;') Delete Song
