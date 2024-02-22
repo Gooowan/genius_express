@@ -17,30 +17,118 @@ html
           commentsList.appendChild(commentElement);
         });
 
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
+        document.getElementById('commentForm').addEventListener('submit', function (e) {
           e.preventDefault();
           const username = document.getElementById('username').value;
           const commentText = document.getElementById('commentText').value;
+          console.log(username, commentText)
           if (username && commentText) {
             socket.emit('newComment', {songId: songId, username: username, text: commentText});
             document.getElementById('username').value = '';
             document.getElementById('commentText').value = '';
           }
         });
-      })
-  body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
-    h1(style='margin-bottom: 0;') #{song.title}
-    h2(style='margin-top: 5px; color: #666;') By #{song.artist}
-    h3(style='color: #888;') Lyrics
-    pre(style='background-color: #fff; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);') #{song.lyrics}
-    a.back-link(href='/', style='display: inline-block; margin-top: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Back to list
-    a.back-link(href=`/${song._id}/edit`, style='display: inline-block; margin: 20px 10px 20px 0; background-color: #ffc107; color: black; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Update Song
-    form(action=`/${song._id}?_method=DELETE`, method="post", style='display: inline-block;')
-      button(type="submit", style='background-color: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;') Delete Song
-    ul#commentsList
-      each comment in comments
-        li= comment.username + ": " + comment.text
-    form#commentForm
-      input(type="text", id="username", placeholder="Your name")
-      input(type="text", id="commentText", placeholder="Write a comment...")
-      button(type="submit") Post Comment
+      });
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+        color: #333;
+      }
+
+      .song-header {
+        margin-bottom: 0;
+      }
+
+      .song-subheader {
+        margin-top: 5px;
+        color: #666;
+      }
+
+      .song-lyrics {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+
+      .edit-link {
+        display: inline-block;
+        margin-right: 10px;
+        background-color: #ffc107;
+        color: black;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+
+      .delete-button {
+        background-color: #dc3545;
+        color: white;
+        padding: 10px 15px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      ul#commentsList {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+      }
+
+      ul#commentsList li {
+        background-color: #e9ecef;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+
+      form#commentForm {
+        margin-top: 20px;
+      }
+
+      form#commentForm input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      form#commentForm button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+  body
+    h1.song-header #{song.title}
+      h2.song-subheader By #{song.artist}
+      h3(style='color: #888;') Lyrics
+      pre.song-lyrics #{song.lyrics}
+      form#commentForm
+        input(type="text", id="username", placeholder="Your name")
+        input(type="text", id="commentText", placeholder="Write a comment...")
+        button(type="submit") Post Comment
+      ul#commentsList
+        each comment in comments
+          li= comment.username + ": " + comment.text
+      a.back-link(href=`/${song._id}/edit`, class='edit-link') Update Song
+      form(action=`/${song._id}?_method=DELETE`, method="post")
+        button.delete-button(type="submit") Delete Song
+      a.back-link(href='/', class='back-link') Back to list

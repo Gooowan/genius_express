@@ -4,7 +4,7 @@ html
         title Add Song
     body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
         h1(style='margin-bottom: 20px;') Add a New Song
-        form(action="/songs/new", method="post", style='background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);')
+        form(action="/new", method="post", style='background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);')
             .form-input(style='margin-bottom: 20px;')
                 label.form-label(for="title", style='display: block; margin-bottom: 5px; font-weight: bold;') Title:
                 input#title(type="text", name="title", required=true, style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;')

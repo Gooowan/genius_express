@@ -9,6 +9,7 @@ const songRoutes = require('./app/routes/songRoutes');
 const socketHandler = require('./app/sockets/socketHandler');
 const http = require('http');
 const socketIo = require('socket.io');
+const Comment = require("./app/models/comment");
 // const postRoutes = require('./app/routes/postRoutes');
 
 const app = express();
@@ -26,7 +27,28 @@ mongoose.connect(process.env.MONGODB_URI)
 io.on('connection', (socket) => {
     console.log('A new client has connected');
     socketHandler(socket);
+    socket.on('newComment', async (data) => {
+        try {
+            console.log('New comment:', data);
+            const newComment = await Comment.create({
+                songId: data.songId,
+                username: data.username,
+                text: data.text,
+            });
+
+            io.emit('comment', newComment);
+        } catch (err) {
+            console.error('Error saving comment:', err);
+        }
+    });
 });
+// io.on('disconnect', () => {
+//     console.log('A user has disconnected');
+// });
+//
+// io.on('error', (err) => {
+//     console.log('Error:', err);
+// });
 
 app.use(cors());
 app.use(express.json());
