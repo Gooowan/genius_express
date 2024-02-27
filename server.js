@@ -6,11 +6,23 @@ const errorHandler = require('./app/middleware/errorHandler');
 const methodOverride = require('method-override');
 const userRoutes = require('./app/routes/userRoutes');
 const songRoutes = require('./app/routes/songRoutes');
-const socketHandler = require('./app/sockets/socketHandler');
 const http = require('http');
 const socketIo = require('socket.io');
 const Comment = require("./app/models/comment");
-// const postRoutes = require('./app/routes/postRoutes');
+
+const whitelist = ["http://localhost:3000"];
+
+const corsOptions = {
+    origin: originFunction,
+};
+
+function originFunction(origin, callback) {
+    if (whitelist.includes(origin) || !origin) {
+        callback(null, true);
+    } else {
+        callback(new Error("Not allowed by CORS"));
+    }
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -26,7 +38,6 @@ mongoose.connect(process.env.MONGODB_URI)
 
 io.on('connection', (socket) => {
     console.log('A new client has connected');
-    socketHandler(socket);
     socket.on('newComment', async (data) => {
         try {
             console.log('New comment:', data);
@@ -42,24 +53,20 @@ io.on('connection', (socket) => {
         }
     });
 });
-// io.on('disconnect', () => {
-//     console.log('A user has disconnected');
-// });
-//
-// io.on('error', (err) => {
-//     console.log('Error:', err);
-// });
 
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(errorHandler);
+
+// app.use(cors());
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use('/', songRoutes);
 app.use('/users', userRoutes);
-// app.use('/posts', postRoutes);
-
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 server.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+
+// TODO 1 - add user page with possibility to add favourite songs (django)
+// TODO 2 - add logging and error handling (express)
+// TODO 3 - add interesting packages (express)
