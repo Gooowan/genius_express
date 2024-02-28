@@ -8,34 +8,53 @@ exports.signup = (req, res) => {
         .then(response => {
             res.send(response.data);
 
-            if (!response.data.password) {
-                return res.status(400).send({ message: 'Password is required' });
-            }
-
-            const user = new User({
-                fullName: response.data.username,
-                role: response.data.role,
-                password: bcrypt.hashSync(response.data.password, 8)
-            });
-
-            user.save((err, user) => {
-                if (err) {
-                    res.status(500)
-                        .send({
-                            message: err
-                        });
-                    return;
-                } else {
-                    res.status(200)
-                        .send({
-                            message: "User Registered successfully"
-                        })
-                }
-            })
+            // if (!response.data.password) {
+            //     return res.status(400).send({ message: 'Password is required' });
+            // }
+            //
+            // const user = new User({
+            //     fullName: response.data.username,
+            //     role: response.data.role,
+            //     password: bcrypt.hashSync(response.data.password, 8)
+            // });
+            //
+            // user.save((err, user) => {
+            //     if (err) {
+            //         res.status(500)
+            //             .send({
+            //                 message: err
+            //             });
+            //         return;
+            //     } else {
+            //         res.status(200)
+            //             .send({
+            //                 message: "User Registered successfully"
+            //             })
+            //     }
+            // })
         })
         .catch(error => {
             console.error(error);
         });
+};
+
+exports.saveuser = (req, res) => {
+    const { username, role, password } = req.body;
+    console.log(req.body);
+    const user = new User({
+        fullName: username,
+        role: role,
+        password: bcrypt.hashSync(password, 8)
+    });
+
+    user.save((err, user) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
+
+        res.status(200).send({ message: "User saved successfully" });
+    });
 };
 
 exports.login = (req, res) => {
