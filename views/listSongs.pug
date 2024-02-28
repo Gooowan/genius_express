@@ -2,10 +2,26 @@ doctype html
 html
     head
         title Song List
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css")
+        script.
+            function toggleFavorite(element) {
+                if (element.classList.contains('fa-regular')) {
+                    element.classList.remove('fa-regular');
+                    element.classList.add('fa-solid');
+                } else {
+                    element.classList.remove('fa-solid');
+                    element.classList.add('fa-regular');
+                }
+            }
     body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
-        h1 Song List
+        div(style='display: flex; align-items: center;')
+            h1 Song List
+            div(style='margin-left: auto;')
+                button(onclick="location.href='/login'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" ) Log In
+                button(onclick="location.href='/signup'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;") Sign Up
         a(href='/new', style='display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Add New Song
         ul(style='list-style-type: none; padding: 0;')
             each song in songs
-                li(style='margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);')
+                li(style='margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;')
                     a(href=`/${song._id}`, style='color: #007bff; text-decoration: none; font-weight: bold;') #{song.title} by #{song.artist}
+                    i(class="fa-regular fa-heart", onclick="toggleFavorite(this)", style="cursor: pointer;")
