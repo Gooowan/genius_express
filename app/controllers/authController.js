@@ -4,8 +4,10 @@ const User = require("../models/user");
 const axios = require('axios');
 
 exports.signup = (req, res) => {
-    axios.post('http://localhost:8000/signup', req.body)
+    axios.get('http://127.0.0.1:8000/signup/', req.body)
         .then(response => {
+            res.send(response.data);
+
             if (!response.data.password) {
                 return res.status(400).send({ message: 'Password is required' });
             }
