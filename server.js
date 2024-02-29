@@ -9,6 +9,7 @@ const songRoutes = require('./app/routes/songRoutes');
 const http = require('http');
 const socketIo = require('socket.io');
 const Comment = require("./app/models/comment");
+const cacheControl = require('express-cache-controller');
 const cookieParser = require('cookie-parser');
 
 const whitelist = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "http://localhost:8000"];
@@ -62,6 +63,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cacheControl({
+    maxAge: 300
+}));
+
 app.use('/', songRoutes);
 
 app.use(errorHandler);
