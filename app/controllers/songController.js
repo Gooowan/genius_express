@@ -1,12 +1,16 @@
 const Song = require('../models/song');
 const Comment = require('../models/comment');
+const Users = require('../models/user');
 const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 
+
 exports.getSongs = async (req, res) => {
     try {
-        const token = req.headers.authorization.split(' ')[1]; // Assuming 'Bearer <token>' format
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const token = req.cookies.token
+        console.log(token);
+
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userId = decoded.id;
         const songs = await Song.find();
         res.render('listSongs', { songs: songs, userId: userId });
@@ -67,22 +71,32 @@ exports.getEditForm = async (req, res) => {
 };
 
 exports.toggleFavorite = async (req, res) => {
-    const userId = req.body.userId;
-    const songId = req.body.songId;
+    const { userId, songId } = req.body;
+    console.log(userId, songId)
+    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(songId);
+
+    if (!userId || !songId || !isValidObjectId) {
+        return res.status(400).send({ error: 'Invalid userId or songId' });
+    }
 
     try {
-        const user = await User.findById(userId);
-        const songIndex = user.likedSongs.indexOf(songId);
+        const user = await Users.findById(userId);
+        if (!user) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        const objectId = new mongoose.Types.ObjectId(songId);
+        const songIndex = user.likedSongs.indexOf(objectId);
 
         if (songIndex > -1) {
             user.likedSongs.splice(songIndex, 1);
         } else {
-            user.likedSongs.push(mongoose.Types.ObjectId(songId));
+            user.likedSongs.push(objectId);
         }
 
         await user.save();
         res.status(200).send({ message: 'Favorite status updated' });
     } catch (error) {
+        console.error('Error in toggleFavorite:', error);
         res.status(500).send({ error: 'An error occurred while updating favorite status' });
     }
 };

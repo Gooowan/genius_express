@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const errorHandler = require('./app/middleware/errorHandler');
@@ -8,8 +9,9 @@ const songRoutes = require('./app/routes/songRoutes');
 const http = require('http');
 const socketIo = require('socket.io');
 const Comment = require("./app/models/comment");
+const cookieParser = require('cookie-parser');
 
-const whitelist = ["http://localhost:3000", "http://127.0.0.1:8000"];
+const whitelist = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "http://localhost:8000"];
 
 const corsOptions = {
     origin: originFunction,
@@ -53,14 +55,16 @@ io.on('connection', (socket) => {
     });
 });
 
+app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(cors(corsOptions));
-app.use(errorHandler);
 
-// app.use(cors());
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use('/', songRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`http://localhost:${PORT}`));

@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const axios = require('axios');
-const config = require('../config');
 
 exports.signup = (req, res) => {
     axios.get('http://127.0.0.1:8000/signup/', req.body)
@@ -62,9 +61,11 @@ exports.loginuser = async (req, res) => {
     }
 
     try {
-        const token = jwt.sign({ id: user._id }, config.secret, {
-            expiresIn: 86400
+        const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: 864000000000000
         });
+
+        res.cookie('token', token, { maxAge: 864000000000000, httpOnly: true });
 
         res.status(200).send({
             message: "User login successfully",
