@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const axios = require('axios');
+const Users = require("../models/user");
 
 exports.signup = (req, res) => {
     axios.get('http://127.0.0.1:8000/signup/', req.body)
@@ -77,10 +78,17 @@ exports.loginuser = async (req, res) => {
 };
 
 exports.displayProfile = async (req, res) => {
-    const userId = req.params.userId;
+    const token = req.cookies.token
+    console.log(token);
+    if (!token) {
+        return res.redirect('/login');
+    }
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded.id;
 
     try {
         const user = await User.findById(userId).populate('likedSongs');
+        console.log('User:', user);
         res.render('profile', { user });
     } catch (error) {
         res.status(500).send({ error: 'An error occurred while retrieving user data' });

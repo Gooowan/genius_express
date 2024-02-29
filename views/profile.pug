@@ -1,0 +1,74 @@
+doctype html
+html
+    head
+        title User Profile
+        style.
+            body {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                background-color: #f4f7f6;
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }
+
+            .back-link {
+                display: inline-block;
+                margin-top: 20px;
+                margin-left: 20px;
+                background-color: #17a2b8;
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: background-color 0.2s;
+            }
+
+            .back-link:hover {
+                background-color: #138496;
+            }
+
+            h1 {
+                color: #333;
+                text-align: center;
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
+
+            p {
+                color: #666;
+                font-size: 16px;
+                margin: 10px 20px;
+            }
+
+            h2 {
+                color: #333;
+                margin-left: 20px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 20px;
+            }
+
+            li {
+                padding: 15px 20px;
+                border-bottom: 2px solid #eee;
+                background-color: white;
+                margin: 5px 0;
+                transition: background-color 0.2s;
+            }
+
+            li:hover {
+                background-color: #f8f9fa;
+            }
+    body
+        h1 #{user.username}
+        p Role: #{user.role}
+        h2 Liked Songs
+        ul
+            each song in user.likedSongs
+                li(style='margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;')
+                    a(href=`/${song._id}`, style='color: #007bff; text-decoration: none; font-weight: bold;') #{song.title} by #{song.artist}
+
+        a.back-link(href='/', class='back-link') Back to list

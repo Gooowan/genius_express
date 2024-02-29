@@ -128,7 +128,8 @@ html
       ul#commentsList
         each comment in comments
           li= comment.username + ": " + comment.text
-      a.back-link(href=`/${song._id}/edit`, class='edit-link') Update Song
-      form(action=`/${song._id}?_method=DELETE`, method="post")
-        button.delete-button(type="submit") Delete Song
+      if user.role === Role.ADMIN
+        a.back-link(href=`/${song._id}/edit`, class='edit-link') Update Song
+        form(action=`/${song._id}?_method=DELETE`, method="post")
+          button.delete-button(type="submit") Delete Song
       a.back-link(href='/', class='back-link') Back to list

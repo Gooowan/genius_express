@@ -6,9 +6,9 @@ html
         script.
             const userId = '#{userId}';
             function toggleFavoriteLogo(element, songId) {
-                console.log(songId, userId);
+                // console.log(songId, userId);
                 const isFavorited = element.classList.contains('fa-solid');
-                console.log(isFavorited, songId, userId);
+                // console.log(isFavorited, songId, userId);
                 fetch('/toggleFavorite', {
                     method: 'POST',
                     headers: {
@@ -36,8 +36,10 @@ html
         div(style='display: flex; align-items: center;')
             h1 Song List
             div(style='margin-left: auto;')
-                button(onclick="location.href='/login'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" ) Log In
-                button(onclick="location.href='/signup'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;") Sign Up
+                button(onclick="location.href='/profile'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" ) Profile
+                //else
+                //    button(onclick="location.href='/login'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" ) Log In
+                //    button(onclick="location.href='/signup'", style="display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;") Sign Up
         a(href='/new', style='display: inline-block; margin-bottom: 20px; background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;') Add New Song
         ul(style='list-style-type: none; padding: 0;')
             each song in songs

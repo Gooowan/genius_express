@@ -3,13 +3,16 @@ const Comment = require('../models/comment');
 const Users = require('../models/user');
 const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
-
+const User = require("../models/user");
+const Role = require('../models/role');
 
 exports.getSongs = async (req, res) => {
     try {
         const token = req.cookies.token
         console.log(token);
-
+        if (!token) {
+            return res.redirect('/login');
+        }
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userId = decoded.id;
         const user = await Users.findById(userId);
@@ -24,13 +27,24 @@ exports.getSong = async (req, res) => {
     try {
         const song = await Song.findById(req.params.id);
         const comments = await Comment.find({songId: req.params.id});
-        // console.log(comments);
-        res.render('detailsSongs', { song: song, comments: comments });
+        const token = req.cookies.token
+        console.log(token);
+        if (!token) {
+            return res.redirect('/login');
+        }
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const userId = decoded.id;
+        const user = await User.findById(userId).populate('likedSongs');
+
+        res.render('detailsSongs', { song: song, comments: comments, user: user, userId: userId, Role: Role});
     } catch (err) {
         res.status(500).send(err);
     }
 };
 
+exports.getAddForm = (req, res) => {
+    res.render('addSong');
+}
 exports.createSong = async (req, res) => {
     try {
         const newSong = new Song(req.body);
