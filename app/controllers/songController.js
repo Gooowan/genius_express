@@ -13,7 +13,7 @@ exports.getSongs = async (req, res) => {
 exports.getSong = async (req, res) => {
     try {
         const song = await Song.findById(req.params.id);
-        const comments = await Comment.find({});
+        const comments = await Comment.find({songId: req.params.id});
         // console.log(comments);
         res.render('detailsSongs', { song: song, comments: comments });
     } catch (err) {

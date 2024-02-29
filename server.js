@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const errorHandler = require('./app/middleware/errorHandler');
 const methodOverride = require('method-override');
-const userRoutes = require('./app/routes/userRoutes');
 const songRoutes = require('./app/routes/songRoutes');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -62,7 +61,6 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use('/', songRoutes);
-app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`http://localhost:${PORT}`));
