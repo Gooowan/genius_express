@@ -77,6 +77,16 @@ exports.loginuser = async (req, res) => {
     }
 };
 
+exports.logout = (req, res) => {
+    try {
+        res.clearCookie('token');
+        res.redirect('/login');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'Logout failed' });
+    }
+}
+
 exports.displayProfile = async (req, res) => {
     const token = req.cookies.token
     console.log(token);
