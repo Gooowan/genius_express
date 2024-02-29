@@ -61,14 +61,16 @@ exports.loginuser = async (req, res) => {
         });
     }
 
-    const token = jwt.sign({ id: user._id }, config.secret, {
-        expiresIn: 86400
-    })
-        .then(() => {
-            res.status(200).send({ message: "User login successfully" });
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message });
+    try {
+        const token = jwt.sign({ id: user._id }, config.secret, {
+            expiresIn: 86400
         });
 
+        res.status(200).send({
+            message: "User login successfully",
+            accessToken: token
+        });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
 };
