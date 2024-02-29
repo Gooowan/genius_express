@@ -12,8 +12,9 @@ exports.getSongs = async (req, res) => {
 
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userId = decoded.id;
+        const user = await Users.findById(userId);
         const songs = await Song.find();
-        res.render('listSongs', { songs: songs, userId: userId });
+        res.render('listSongs', { songs: songs, user: user, userId: userId});
     } catch (err) {
         res.status(500).send(err);
     }

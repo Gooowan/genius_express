@@ -43,4 +43,7 @@ html
             each song in songs
                 li(style='margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;')
                     a(href=`/${song._id}`, style='color: #007bff; text-decoration: none; font-weight: bold;') #{song.title} by #{song.artist}
-                    i(class="fa-regular fa-heart", onclick=`toggleFavoriteLogo(this, "${song._id}")`, style="cursor: pointer;")
+                    if user.likedSongs.includes(song._id)
+                        i(class="fa-solid fa-heart", onclick=`toggleFavoriteLogo(this, "${song._id}")`, style="cursor: pointer;")
+                    else
+                        i(class="fa-regular fa-heart", onclick=`toggleFavoriteLogo(this, "${song._id}")`, style="cursor: pointer;")
