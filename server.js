@@ -10,7 +10,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const Comment = require("./app/models/comment");
 
-const whitelist = ["http://localhost:3000"];
+const whitelist = ["http://localhost:3000", "http://127.0.0.1:8000"];
 
 const corsOptions = {
     origin: originFunction,

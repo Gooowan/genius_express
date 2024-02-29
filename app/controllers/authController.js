@@ -41,20 +41,21 @@ exports.signup = (req, res) => {
 exports.saveuser = (req, res) => {
     const { username, role, password } = req.body;
     console.log(req.body);
+
     const user = new User({
-        fullName: username,
+        username: username,
         role: role,
         password: bcrypt.hashSync(password, 8)
     });
+    // console.log(user);
+    user.save()
+        .then(() => {
+            res.status(200).send({ message: "User saved successfully" });
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message });
+        });
 
-    user.save((err, user) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-
-        res.status(200).send({ message: "User saved successfully" });
-    });
 };
 
 exports.login = (req, res) => {
