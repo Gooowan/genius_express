@@ -15,7 +15,11 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, "password not provided "]
-    }
+    },
+    likedSongs: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Song'
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema);

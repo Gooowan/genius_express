@@ -1,6 +1,6 @@
 const express = require('express');
-const { getSongs, getSong, createSong, updateSong, deleteSong, getEditForm } = require('../controllers/songController');
-const {login, signup, saveuser, loginuser} = require("../controllers/authController");
+const { getSongs, getSong, createSong, updateSong, deleteSong, getEditForm, toggleFavorite} = require('../controllers/songController');
+const {login, signup, saveuser, loginuser, displayProfile } = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -11,6 +11,8 @@ router.post('/loginuser', loginuser);
 router.post('/new', createSong);
 router.get('/login', login);
 router.get('/signup', signup);
+router.post('/toggleFavorite', toggleFavorite);
+router.get('/profile/:userId', displayProfile);
 router.get('/:id', getSong);
 router.put('/:id', updateSong);
 router.delete('/:id', deleteSong);

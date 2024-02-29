@@ -1,10 +1,15 @@
 const Song = require('../models/song');
 const Comment = require('../models/comment');
+const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
 
 exports.getSongs = async (req, res) => {
     try {
+        const token = req.headers.authorization.split(' ')[1]; // Assuming 'Bearer <token>' format
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
         const songs = await Song.find();
-        res.render('listSongs', { songs: songs });
+        res.render('listSongs', { songs: songs, userId: userId });
     } catch (err) {
         res.status(500).send(err);
     }
@@ -58,5 +63,26 @@ exports.getEditForm = async (req, res) => {
         res.render('editSong', { song: song });
     } catch (err) {
         res.status(500).send(err);
+    }
+};
+
+exports.toggleFavorite = async (req, res) => {
+    const userId = req.body.userId;
+    const songId = req.body.songId;
+
+    try {
+        const user = await User.findById(userId);
+        const songIndex = user.likedSongs.indexOf(songId);
+
+        if (songIndex > -1) {
+            user.likedSongs.splice(songIndex, 1);
+        } else {
+            user.likedSongs.push(mongoose.Types.ObjectId(songId));
+        }
+
+        await user.save();
+        res.status(200).send({ message: 'Favorite status updated' });
+    } catch (error) {
+        res.status(500).send({ error: 'An error occurred while updating favorite status' });
     }
 };

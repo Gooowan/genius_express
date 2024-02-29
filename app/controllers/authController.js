@@ -74,3 +74,14 @@ exports.loginuser = async (req, res) => {
         res.status(500).send({ message: err.message });
     }
 };
+
+exports.displayProfile = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('likedSongs');
+        res.render('profile', { user });
+    } catch (error) {
+        res.status(500).send({ error: 'An error occurred while retrieving user data' });
+    }
+};

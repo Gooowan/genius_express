@@ -4,14 +4,32 @@ html
         title Song List
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css")
         script.
-            function toggleFavorite(element) {
-                if (element.classList.contains('fa-regular')) {
-                    element.classList.remove('fa-regular');
-                    element.classList.add('fa-solid');
-                } else {
-                    element.classList.remove('fa-solid');
-                    element.classList.add('fa-regular');
-                }
+            function toggleFavoriteLogo(element, songId) {
+                // const userId = '#{userId}';
+                const isFavorited = element.classList.contains('fa-solid');
+
+                fetch('/toggleFavorite', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({userId, songId}),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Favorite status updated') {
+                            if (isFavorited) {
+                                element.classList.remove('fa-solid');
+                                element.classList.add('fa-regular');
+                            } else {
+                                element.classList.remove('fa-regular');
+                                element.classList.add('fa-solid');
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
             }
     body(style='font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; color: #333;')
         div(style='display: flex; align-items: center;')
@@ -24,4 +42,4 @@ html
             each song in songs
                 li(style='margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;')
                     a(href=`/${song._id}`, style='color: #007bff; text-decoration: none; font-weight: bold;') #{song.title} by #{song.artist}
-                    i(class="fa-regular fa-heart", onclick="toggleFavorite(this)", style="cursor: pointer;")
+                    i(class="fa-regular fa-heart", onclick="toggleFavoriteLogo(this, '#{song._id}')", style="cursor: pointer;")

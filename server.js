@@ -64,7 +64,3 @@ app.use('/', songRoutes);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`http://localhost:${PORT}`));
-
-// TODO 1 - add user page with possibility to add favourite songs (django)
-// TODO 2 - add logging and error handling (express)
-// TODO 3 - add interesting packages (express)
